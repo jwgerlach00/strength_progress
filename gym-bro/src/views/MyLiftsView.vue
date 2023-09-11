@@ -7,7 +7,7 @@
     <br>
     <button @click="addNewLift">Create new lift</button>
   </div>
-  <AddNewLift v-show="showAddNewLift" @submitted="showAddNewLift=false"/>
+  <AddNewLift v-if="showAddNewLift" @submitted="showAddNewLift=false"/>
 </template>
 
 <script setup lang="ts">
