@@ -23,16 +23,37 @@
       <option v-for="unit in unitOptions" :key="unit">{{ unit }}</option>
     </select>
     <br>
-    
-    <button @click="emit('submitted', true)">Submit</button>
+
+    <button @click="submit">Submit</button>
   </div>
 </template>
 
 <script setup lang="ts">
+import axios from 'axios'
 import { ref, Ref } from 'vue'
 
 // eslint-disable-next-line
-const emit = defineEmits(['submitted']) // compiler macro (not identified by eslint)
+const emit = defineEmits(['submitted', 'progressPlan']) // compiler macro (not identified by eslint)
+
+const progressPlan: Ref<Array<number>> = ref([])
+
+function submit () {
+  console.log(currentLift.value)
+  axios.post('http://localhost:5004/calcWeight', {
+    currentWeight: currentLift.value,
+    reps: reps.value,
+    goalOneRepMax: goalLift.value
+  })
+    .then(response => {
+      progressPlan.value = response.data
+      console.log('this is running')
+      emit('progressPlan', progressPlan.value)
+      emit('submitted', true)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
 
 const liftTypes: Ref<string[]> = ref([
   'Squat',
