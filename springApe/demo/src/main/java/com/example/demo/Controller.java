@@ -22,12 +22,12 @@ public class Controller {
     }
 
     @PostMapping("/calcWeight")
-    public ArrayList<Float> getWeight(@RequestBody newLiftResponse lift) {
+    public ArrayList<Float> getWeight(@RequestBody newLiftRequest lift) {
         return Calculator.goalProgressionTimeline(
-            lift.getCurrentWeight(),
-            lift.getReps(),
+            lift.getCurrentOneRepMax(),
             lift.getGoalOneRepMax(),
-            "aggressive"
+            lift.getUnits().toLowerCase(),
+            lift.getProtocolType().toLowerCase()
         );
     }
 
