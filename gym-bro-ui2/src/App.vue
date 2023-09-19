@@ -25,6 +25,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background-color: #282a36;
 }
 
 nav {
@@ -46,8 +47,5 @@ nav a.router-link-exact-active {
 .v-list {
   color: #f8f8f2 !important;
   background-color: #44475a !important;
-}
-.v-btn {
-  background-color: #ff5555 !important;
 }
 </style>

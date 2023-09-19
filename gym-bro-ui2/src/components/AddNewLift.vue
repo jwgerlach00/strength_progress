@@ -1,48 +1,65 @@
 <template>
-  <div class="ape">
-    <h2 style="text-align: center;">Add New Lift</h2>
-    <label>Lift:</label>
-    <select v-model="selectedLiftType">
-      <option v-for="lift in liftTypes" :key="lift">{{ lift }}</option>
-    </select>
-    <br>
+  <v-dialog v-model="show" @click:outside="emit('update:modelValue', false)">
+    <v-card>
+      <h2 style="text-align:center;padding-bottom:5%;padding-top:5%;">Add New Lift</h2>
 
-    <label>Units:</label>
-    <select v-model="selectedUnit">
-      <option v-for="unit in unitOptions" :key="unit">{{ unit }}</option>
-    </select>
-    <br>
+      <v-row dense>
+        <v-col cols="6">
+          <v-select label="Lift type" :items="liftTypes" v-model="selectedLiftType" variant="outlined"/>
+        </v-col>
+        <v-col cols="6">
+          <v-select label="Units" :items="unitOptions" v-model="selectedUnit" variant="outlined"/>
+        </v-col>
+      </v-row>
 
-    <label>Current:</label>
-    <input type="number" v-model="currentLift" min="0" step="1">
-    <label>Reps:</label>
-    <input v-model="reps" type="range" min="1" max="10">
-    <label>{{ reps }}</label>
-    <br>
+      <v-row dense>
+        <v-col>
+          <v-text-field label="Current weight" v-model="currentLift" variant="outlined"></v-text-field>
+        </v-col>
+        <v-col>
+          <v-label>Reps: {{ reps }}</v-label>
+          <v-slider v-model="reps" min="1" max="10" step="1" show-ticks="always" tick-size="4" color="white"/>
+        </v-col>
+      </v-row>
+      <label style="color:#50fa7b;">Estimated current 1RM: {{ currentOneRepMax }} {{ selectedUnit }}</label>
+      <br>
 
-    <label>Estimated current 1RM: {{ currentOneRepMax }} {{ selectedUnit }}</label>
-    <br>
 
-    <label>Goal 1RM:</label>
-    <input type="number" v-model="goalLift" min="0" step="1">
-    <br>
+      <v-row dense>
+        <v-col cols="6">
+          <v-text-field label="Goal 1RM" v-model="goalLift" variant="outlined"></v-text-field>
+        </v-col>
+        <v-col cols="6">
+          <v-select label="Protocol type" :items="protocolTypes" v-model="selectedProtocolType" variant="outlined"/>
+        </v-col>
+      </v-row>
 
-    <label>Protocol type:</label>
-    <select v-model="selectedProtocolType">
-      <option v-for="protocol in protocolTypes" :key="protocol">{{ protocol }}</option>
-    </select>
-    <br>
+      <v-row dense>
+        <v-col cols="12">
+          <v-btn @click="submit" style="width:100%;" color="#50fa7b">Submit</v-btn>
+        </v-col>
+      </v-row>
 
-    <button @click="submit">Submit</button>
-  </div>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">
 import axios from 'axios'
 import { computed, ref, Ref } from 'vue'
 
+const props = defineProps({
+  modelValue: {
+    type: Boolean,
+    default: false,
+    required: true
+  }
+})
+
 // eslint-disable-next-line
 const emit = defineEmits(['submitted', 'progressPlan']) // compiler macro (not identified by eslint)
+
+const show = computed(() => props.modelValue)
 
 const progressPlan: Ref<Array<number>> = ref([])
 
@@ -118,8 +135,7 @@ const selectedProtocolType: Ref<string> = ref('Conservative')
 </script>
 
 <style scoped>
-.ape {
-  border: 2px solid black;
+.v-card {
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 20px;

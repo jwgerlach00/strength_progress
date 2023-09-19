@@ -1,5 +1,5 @@
 <template>
-  <v-card class="my-lifts" title="My Lifts">
+  <v-card class="my-lifts" title="My Lifts" style="float:left;">
     <v-list :items="lifts"></v-list>
 
 <!-- 
@@ -7,12 +7,16 @@
       {{ lift }}
     </li> -->
     <br>
-    <v-btn @click="addNewLift" class="add-new-lift-btn">Create new lift</v-btn>
+    <v-btn @click="addNewLift" class="add-new-lift-btn" color="#ff5555">Create new lift</v-btn>
     <div id="plot-container" class="plot-container"></div>
   </v-card>
 
-  <AddNewLift v-if="showAddNewLift" @submitted="showAddNewLift=false" @progressPlan="postProgressPlanToChart($event)"/>
-  <ChartShower :data="chartData"/>
+  <v-card class="chart-container">
+    <ChartShower :data="chartData"/>
+  </v-card>
+
+  <AddNewLift v-model="showAddNewLift" @submitted="showAddNewLift=false" @progressPlan="postProgressPlanToChart($event)"/>
+  
 </template>
 
 <script setup lang="ts">
@@ -35,8 +39,6 @@ const lifts: Ref<object[]> = ref([
 const showAddNewLift: Ref<boolean> = ref(false)
 function addNewLift () {
   showAddNewLift.value = true
-  console.log('Adding new lift')
-  // open add new lift form
 }
 
 const chartData: Ref<Array<number>> = ref([])
@@ -50,7 +52,15 @@ function postProgressPlanToChart (progressPlan: Array<number>) {
   padding: 0px 50px;
   text-align: left;
   width: 20%;
-  margin: 50px;
+  margin-left: 10%;
+}
+.chart-container {
+  padding: 0px 50px;
+  text-align: left;
+  width: 58%;
+  margin-left: 2%;
+  margin-right: 10%;
+  float:right;
 }
 .add-new-lift-btn {
   margin-left: 10px;
